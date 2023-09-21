@@ -1,5 +1,6 @@
 package com.dozn.socketecho.echo.client;
 
+import com.dozn.socketecho.crypt.AES128;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -23,10 +24,11 @@ public class EchoClient {
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
-                System.out.print("Enter a message to send to the server (or 'exit' to quit): ");
-
+                System.out.print("[Echo Client] Enter a message to send to the server : ");
                 String message = scanner.nextLine();
-                writer.println(message);
+                String encryptMessage = encryptMessage(message);
+
+                writer.println(encryptMessage);
 
                 String serverResponse = reader.readLine();
                 System.out.println("[Echo Client] Received from server: " + serverResponse);
@@ -34,5 +36,12 @@ public class EchoClient {
         } catch (IOException e) {
             log.error("[Echo Client]socket send message error", e);
         }
+    }
+
+    private static String encryptMessage(String message) {
+        String key = "keykeykeykeykeykey";
+        AES128 aes = new AES128(key);
+        String encryptMessage = aes.encrypt(message);
+        return encryptMessage;
     }
 }
