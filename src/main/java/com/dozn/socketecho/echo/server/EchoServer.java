@@ -26,15 +26,30 @@ public class EchoServer {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             log.info("[Echo Server]Echo Server is running on port = {}", port);
 
-            Socket clientSocket = serverSocket.accept();
-
             while (true) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
+                Socket clientSocket = serverSocket.accept();
+                log.info("[Echo Server] Accepted connection from client: {}:{}", clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort());
 
+                // 각 클라이언트와의 통신을 처리하기 위한 스레드 생성
+                Thread clientThread = new Thread(() -> handleClient(clientSocket));
+                clientThread.start();
+            }
+
+//            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void handleClient(Socket clientSocket) {
+        try (
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
+        ) {
+            while (true) {
                 String clientMessage = reader.readLine();
                 String decryptMessage = decryptMessage(clientMessage);
-                log.info("[Echo Server] Received from client message: {}", clientMessage);
+                log.info("[Echo Server] Received from client {}: {}", clientSocket.getInetAddress().getHostAddress(), clientMessage);
                 log.info("[Echo Server] Decrypt message: {}", decryptMessage);
 
                 messageQueue.add(decryptMessage);
@@ -45,9 +60,14 @@ public class EchoServer {
                     writer.println(decryptMessage);
                 }
             }
-//            clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
