@@ -49,7 +49,7 @@ public class EchoServer {
             while (true) {
                 String clientMessage = reader.readLine();
                 String decryptMessage = decryptMessage(clientMessage);
-                log.info("[Echo Server] Received from client {}: {}", clientSocket.getInetAddress().getHostAddress(), clientMessage);
+                log.info("[Echo Server] Received from client {}:{} : {}", clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort(), clientMessage);
                 log.info("[Echo Server] Decrypt message: {}", decryptMessage);
 
                 messageQueue.add(decryptMessage);
