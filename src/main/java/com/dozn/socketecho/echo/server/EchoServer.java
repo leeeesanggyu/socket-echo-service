@@ -2,18 +2,23 @@ package com.dozn.socketecho.echo.server;
 
 import com.dozn.socketecho.crypt.AES128;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Queue;
 
 @Slf4j
 public class EchoServer {
+
+    private static final Queue<String> messageQueue = new LinkedList<>();
+    private static final int maxQueueSize = 10;
 
     public static void on() {
         int port = 8081;
@@ -29,12 +34,16 @@ public class EchoServer {
 
                 String clientMessage = reader.readLine();
                 String decryptMessage = decryptMessage(clientMessage);
-
                 log.info("[Echo Server] Received from client message: {}", clientMessage);
                 log.info("[Echo Server] Decrypt message: {}", decryptMessage);
 
-                // Echo the message back
-                writer.println(decryptMessage);
+                messageQueue.add(decryptMessage);
+                Optional<String> overQueueMessage = overSizeRemoveReturn();
+                if (overQueueMessage.isPresent()) {
+                    writer.println(decryptMessage + ", pollQueueMessage : " + overQueueMessage.get());
+                } else {
+                    writer.println(decryptMessage);
+                }
             }
 //            clientSocket.close();
         } catch (IOException e) {
@@ -42,10 +51,17 @@ public class EchoServer {
         }
     }
 
+    private static Optional<String> overSizeRemoveReturn() {
+        if (messageQueue.size() > maxQueueSize) {
+            return Optional.ofNullable(messageQueue.poll());
+        }
+        return Optional.empty();
+    }
+
+
     private static String decryptMessage(String clientMessage) {
         String key = "keykeykeykeykeykey";
         AES128 aes = new AES128(key);
-        String decryptMessage = aes.decrypt(clientMessage);
-        return decryptMessage;
+        return aes.decrypt(clientMessage);
     }
 }
