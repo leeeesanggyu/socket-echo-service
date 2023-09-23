@@ -24,24 +24,24 @@ public class EchoClient {
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
-                System.out.print("[Echo Client] Enter a message to send to the server : ");
+                log.info("[Echo Client] Enter a message to send to the server : ");
                 String message = scanner.nextLine();
                 String encryptMessage = encryptMessage(message);
 
                 writer.println(encryptMessage);
 
                 String serverResponse = reader.readLine();
-                System.out.println("[Echo Client] Received from server: " + serverResponse);
+                log.info("[Echo Client] Received from server: {}", serverResponse);
             }
         } catch (IOException e) {
-            log.error("[Echo Client]socket send message error", e);
+            log.error("[Echo Client]Socket 객체 생성 오류", e);
+            throw new RuntimeException("Socket 객체 생성 오류", e);
         }
     }
 
     private static String encryptMessage(String message) {
         String key = "keykeykeykeykeykey";
         AES128 aes = new AES128(key);
-        String encryptMessage = aes.encrypt(message);
-        return encryptMessage;
+        return aes.encrypt(message);
     }
 }

@@ -31,13 +31,11 @@ public class EchoServer {
                 log.info("[Echo Server] Accepted connection from client: {}:{}", clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort());
 
                 // 각 클라이언트와의 통신을 처리하기 위한 스레드 생성
-                Thread clientThread = new Thread(() -> handleClient(clientSocket));
-                clientThread.start();
+                new Thread(() -> handleClient(clientSocket)).start();
             }
-
-//            clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Socket 객체 생성 오류", e);
+            throw new RuntimeException("Socket 객체 생성 오류", e);
         }
     }
 
@@ -61,13 +59,19 @@ public class EchoServer {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("데이터 송수신 객체 생성 오류", e);
+            throw new RuntimeException("Socket 객체 생성 오류", e);
         } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeSocket(clientSocket);
+        }
+    }
+
+    private static void closeSocket(Socket clientSocket) {
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            log.error("SocketClient close 오류", e);
+            throw new RuntimeException("SocketClient close 오류", e);
         }
     }
 
