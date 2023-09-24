@@ -2,16 +2,23 @@
 
 ## 실행법
 client on
-<img width="731" alt="스크린샷 2023-09-21 오후 7 27 09" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/d433b207-89ce-4acc-864e-523780a8d203">
+<img width="1043" alt="스크린샷 2023-09-24 오후 11 38 27" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/2b441be0-3613-409a-a850-773c3d2cadfc">
+
 
 client2 on
-<img width="737" alt="스크린샷 2023-09-21 오후 7 27 28" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/dd014762-51f5-4fb7-be64-768efc23fed2">
+<img width="1042" alt="스크린샷 2023-09-24 오후 11 38 32" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/7d43f2f8-40c0-43da-bc95-d22ed38a2da9">
+
 
 server on
-<img width="729" alt="스크린샷 2023-09-21 오후 7 26 48" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/a35e29d4-2e04-431d-b111-7ac77044be55">
+<img width="1051" alt="스크린샷 2023-09-24 오후 11 38 20" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/3c814d40-e21a-4b45-97c6-9ff301d1897d">
+
 
 <p>Application을 실행할때 arguments로 `server`, `client` 값을 받아 따로따로 실행해주었습니다.</p>
 <p>client, client2와 server의 port도 따로 변경하여 각각 독립적으로 실행시켜줍니다.</p>
+#### Port
+- EchoServer Application Port : 8080
+- EchoServer Socket Port : 8081
+- EchoClient Application Port : 8082 ~ ...
 
 ## 결과
 
