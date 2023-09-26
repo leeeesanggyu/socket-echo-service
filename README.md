@@ -37,7 +37,3 @@ client2 on
 ### Queue의 Size를 초과하였을때의 반환 값
 
 <img width="597" alt="스크린샷 2023-09-21 오후 7 35 01" src="https://github.com/salgu1998/socket-echo-service/assets/76906458/2e7acfb9-8c2b-4b8e-ad83-7cbb118ffb48">
-
-
-<br><br><br><br>
-> 포스팅 : https://velog.io/@salgu1998/AES128로-암호화복호화-하는-echo-socket-service-만들기
